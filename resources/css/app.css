@@ -1,11 +1,209 @@
-@import 'tailwindcss';
+/* ─── 1. Bootstrap depuis node_modules (pas de CDN) ─── */
+@import 'bootstrap/dist/css/bootstrap.min.css';
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-@source '../**/*.blade.php';
-@source '../**/*.js';
+/* ─── 2. Bootstrap Icons depuis node_modules ─── */
+@import 'bootstrap-icons/font/bootstrap-icons.min.css';
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+/* ─── 3. Variables globales BiblioApp ─── */
+:root {
+    --sbg:    #0f172a;
+    --shov:   #1e293b;
+    --acc:    #6366f1;
+    --bdr:    #e2e8f0;
+    --bgp:    #f8fafc;
+
+    /* Image locale (dans public/images/) */
+    --lib-bg: url('/images/bibliotheque.jpg');
+}
+
+/* ─── 4. Typographie Inter (locale via npm) ─── */
+@font-face {
+    font-family: 'Inter';
+    src: url('/fonts/inter/Inter-Regular.woff2') format('woff2');
+    font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+    font-family: 'Inter';
+    src: url('/fonts/inter/Inter-Medium.woff2') format('woff2');
+    font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+    font-family: 'Inter';
+    src: url('/fonts/inter/Inter-SemiBold.woff2') format('woff2');
+    font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+    font-family: 'Inter';
+    src: url('/fonts/inter/Inter-Bold.woff2') format('woff2');
+    font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+    font-family: 'Inter';
+    src: url('/fonts/inter/Inter-ExtraBold.woff2') format('woff2');
+    font-weight: 800; font-style: normal; font-display: swap;
+}
+
+/* ─── 5. Body : fond bibliothèque sur TOUTES les pages ─── */
+* { font-family: 'Inter', sans-serif; box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background-color: var(--bgp);
+
+    /* Image de fond bibliothèque permanente */
+    background-image: var(--lib-bg);
+    background-size: cover;
+    background-position: center top;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+/* Overlay semi-transparent sur l'image
+   (différent selon la page : app ou auth) */
+body.page-app::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    /* Overlay très léger sur les pages intérieures */
+    background: rgba(248, 250, 252, 0.93);
+    z-index: 0;
+    pointer-events: none;
+}
+
+body.page-auth::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    /* Overlay plus sombre sur login/register pour le texte blanc */
+    background: linear-gradient(135deg, rgba(15,23,42,.88) 0%, rgba(30,41,59,.78) 100%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Tout ce qui vient après l'overlay doit être au-dessus */
+#sidebar, #main, .auth-left, .auth-right,
+.right-panel, .left-panel {
+    position: relative;
+    z-index: 1;
+}
+
+/* ─── 6. Sidebar ─── */
+#sidebar {
+    position: fixed; top: 0; left: 0;
+    width: 260px; height: 100vh;
+    background: var(--sbg);
+    display: flex; flex-direction: column;
+    z-index: 1000; overflow-y: auto;
+}
+.sl { padding: 1.4rem 1.25rem .9rem; border-bottom: 1px solid rgba(255,255,255,.07); }
+.sl .li {
+    width: 40px; height: 40px; background: var(--acc);
+    border-radius: 10px; display: flex; align-items: center;
+    justify-content: center; font-size: 1.2rem; color: #fff; margin-bottom: .55rem;
+}
+.sl h5 { color: #fff; font-weight: 700; margin: 0; font-size: 1rem; }
+.sl small { color: #64748b; font-size: .7rem; }
+.snav { padding: 1rem .75rem; flex: 1; }
+.nst {
+    color: #475569; font-size: .63rem; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase;
+    padding: .6rem .5rem .2rem;
+}
+.slink {
+    display: flex; align-items: center; gap: .7rem;
+    padding: .58rem .75rem; border-radius: 8px;
+    color: #94a3b8; text-decoration: none;
+    font-size: .84rem; font-weight: 500;
+    transition: all .15s; margin-bottom: 2px;
+}
+.slink:hover  { background: var(--shov); color: #e2e8f0; }
+.slink.active { background: var(--acc);  color: #fff; }
+.slink i { font-size: .95rem; width: 18px; text-align: center; }
+
+.sidebar-footer { padding: .75rem 1rem; border-top: 1px solid rgba(255,255,255,.07); }
+.admin-info {
+    display: flex; align-items: center; gap: .65rem;
+    padding: .5rem .75rem; border-radius: 8px;
+    background: rgba(255,255,255,.04);
+}
+.admin-av {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: var(--acc); display: flex; align-items: center;
+    justify-content: center; font-size: .75rem; font-weight: 700;
+    color: #fff; flex-shrink: 0;
+}
+.admin-name { color: #e2e8f0; font-size: .8rem; font-weight: 600; line-height: 1.2; }
+.admin-role { color: #475569; font-size: .68rem; }
+.btn-logout {
+    display: flex; align-items: center; gap: .6rem;
+    padding: .5rem .75rem; border-radius: 8px;
+    color: #64748b; text-decoration: none;
+    font-size: .8rem; font-weight: 500;
+    transition: all .15s; margin-top: .35rem;
+    border: none; background: none; width: 100%; cursor: pointer;
+}
+.btn-logout:hover { background: rgba(239,68,68,.15); color: #f87171; }
+
+/* ─── 7. Main content ─── */
+#main { margin-left: 260px; min-height: 100vh; }
+.topbar {
+    background: rgba(255,255,255,.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--bdr);
+    padding: .875rem 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 500;
+}
+.tb-title { font-weight: 700; font-size: 1.05rem; color: #0f172a; margin: 0; }
+.tb-bc    { font-size: .75rem; color: #64748b; }
+.pcontent { padding: 1.75rem 2rem; }
+
+/* ─── 8. Cartes & composants (inchangés) ─── */
+.card { border: 1px solid var(--bdr); border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,.04); background: rgba(255,255,255,.97); }
+.sc {
+    border-radius: 12px; padding: 1.4rem;
+    border: 1px solid var(--bdr); background: rgba(255,255,255,.97);
+    display: flex; align-items: flex-start; gap: 1rem;
+}
+.sic  { width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0; }
+.sl2  { font-size: .72rem; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+.sv   { font-size: 1.75rem; font-weight: 700; color: #0f172a; line-height: 1.1; }
+.ss   { font-size: .77rem; color: #64748b; margin-top: .15rem; }
+.tc   { background: rgba(255,255,255,.97); border-radius: 12px; border: 1px solid var(--bdr); overflow: hidden; }
+.th   { padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--bdr); display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.table > :not(caption) > * > * { padding: .8rem 1.2rem; }
+.table thead th { background: #f8fafc; font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #64748b; border-bottom: 1px solid var(--bdr); white-space: nowrap; }
+.table tbody tr:hover { background: #fafbff; }
+.table tbody td { font-size: .865rem; color: #334155; vertical-align: middle; }
+.bp { border-radius: 20px; padding: .28em .72em; font-size: .7rem; font-weight: 600; }
+.bs { background: #d1fae5; color: #065f46; }
+.bw { background: #fef3c7; color: #92400e; }
+.bd { background: #fee2e2; color: #991b1b; }
+.bi2{ background: #e0f2fe; color: #075985; }
+.bm { background: #f1f5f9; color: #475569; }
+.btn-primary { background: var(--acc) !important; border-color: var(--acc) !important; }
+.btn-primary:hover { background: #4f46e5 !important; border-color: #4f46e5 !important; }
+.ba { padding: .32rem .58rem; font-size: .78rem; border-radius: 7px; }
+.fc  { background: rgba(255,255,255,.97); border-radius: 12px; border: 1px solid var(--bdr); }
+.fch { padding: 1.4rem; border-bottom: 1px solid var(--bdr); }
+.fcb { padding: 1.4rem; }
+.form-label { font-size: .8rem; font-weight: 600; color: #374151; }
+.form-control, .form-select { border-color: #d1d5db; border-radius: 8px; font-size: .875rem; }
+.form-control:focus, .form-select:focus { border-color: var(--acc); box-shadow: 0 0 0 3px rgba(99,102,241,.1); }
+.alert { border-radius: 10px; border: none; font-size: .875rem; }
+.alert-success { background: #d1fae5; color: #065f46; }
+.alert-danger  { background: #fee2e2; color: #991b1b; }
+.sw2 { position: relative; }
+.sw2 .bi { position: absolute; left: .75rem; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: .9rem; }
+.si  { border-radius: 8px; border-color: #d1d5db; font-size: .85rem; padding-left: 2.25rem; }
+.es  { padding: 3.5rem 2rem; text-align: center; }
+.es i { font-size: 2.8rem; color: #cbd5e1; }
+.es h6 { color: #64748b; margin-top: .75rem; }
+.es p  { color: #94a3b8; font-size: .85rem; }
+.av  { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .78rem; font-weight: 700; flex-shrink: 0; }
+
+@media (max-width: 768px) {
+    #sidebar { transform: translateX(-100%); transition: transform .25s; }
+    #sidebar.open { transform: translateX(0); }
+    #main { margin-left: 0; }
 }
