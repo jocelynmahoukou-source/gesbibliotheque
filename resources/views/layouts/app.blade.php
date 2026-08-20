@@ -88,14 +88,14 @@
             <i class="bi bi-speedometer2"></i> Tableau de bord
         </a>
         <div class="nst" style="margin-top:.5rem">Catalogue</div>
-        <a href="{{ route('livres.index') }}" class="slink {{ request()->routeIs('livres.*') ? 'active' : '' }}">
-            <i class="bi bi-journals"></i> Livres
-        </a>
         <a href="{{ route('auteurs.index') }}" class="slink {{ request()->routeIs('auteurs.*') ? 'active' : '' }}">
             <i class="bi bi-person-lines-fill"></i> Auteurs
         </a>
         <a href="{{ route('categories.index') }}" class="slink {{ request()->routeIs('categories.*') ? 'active' : '' }}">
             <i class="bi bi-tags"></i> Catégories
+        </a>
+        <a href="{{ route('livres.index') }}" class="slink {{ request()->routeIs('livres.*') ? 'active' : '' }}">
+            <i class="bi bi-journals"></i> Livres
         </a>
         <div class="nst" style="margin-top:.5rem">Membres & Prêts</div>
         <a href="{{ route('adherents.index') }}" class="slink {{ request()->routeIs('adherents.*') ? 'active' : '' }}">
