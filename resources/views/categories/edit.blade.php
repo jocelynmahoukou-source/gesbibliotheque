@@ -8,7 +8,7 @@
     <div class="fch"><div class="fw-semibold">Modifier — {{ $categorie->nom }}</div></div>
     <div class="fcb">
         @if($errors->any())<div class="alert alert-danger mb-3">@foreach($errors->all() as $e){{ $e }}<br>@endforeach</div>@endif
-        <form method="POST" action="{{ route('categories.update',$categorie) }}">
+        <form method="POST" action="{{ route('categories.update', ['categorie' => $categorie->id]) }}">
             @csrf @method('PUT')
             <div class="mb-3"><label class="form-label">Nom <span class="text-danger">*</span></label>
                 <input type="text" name="nom" value="{{ old('nom',$categorie->nom) }}" class="form-control" required></div>

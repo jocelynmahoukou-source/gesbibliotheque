@@ -16,7 +16,7 @@
                 <div class="col-md-6"><label class="form-label">Nom <span class="text-danger">*</span></label>
                     <input type="text" name="nom" value="{{ old('nom') }}" class="form-control" required></div>
                 <div class="col-12"><label class="form-label">Nationalité</label>
-                    <input type="text" name="nationalite" value="{{ old('nationalite') }}" class="form-control" placeholder="Ex: Française"></div>
+                    <input type="text" name="nationalite" value="{{ old('nationalite') }}" class="form-control" placeholder="Ex: Congolaise"></div>
                 <div class="col-12"><label class="form-label">Biographie</label>
                     <textarea name="bio" class="form-control" rows="4" placeholder="Courte biographie...">{{ old('bio') }}</textarea></div>
             </div>

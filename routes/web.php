@@ -22,7 +22,9 @@ Route::middleware('auth.admin')->group(function () {
 
     Route::resource('livres',    LivreController::class);
     Route::resource('auteurs',   AuteurController::class)->except(['show']);
-    Route::resource('categories',CategorieController::class)->except(['show','create']);
+    Route::resource('categories', CategorieController::class)
+    ->except(['show', 'create'])
+    ->parameters(['categories' => 'categorie']);
     Route::resource('adherents', AdherentController::class);
     Route::resource('emprunts',  EmpruntController::class)->except(['show']);
     Route::patch('/emprunts/{emprunt}/retour', [EmpruntController::class, 'retour'])->name('emprunts.retour');
